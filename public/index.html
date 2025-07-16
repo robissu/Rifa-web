@@ -112,7 +112,11 @@
     onValue(estadoRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        estadoNumeros = Object.values(data);
+        estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
+        Object.entries(data).forEach(([index, valor]) => {
+          estadoNumeros[parseInt(index)] = valor;
+        });
+
         atualizarInterface();
       }
     });
