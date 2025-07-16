@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,36 +10,44 @@
       font-family: Arial, sans-serif;
       padding: 20px;
     }
+
     .topo {
       margin-bottom: 20px;
     }
+
     .topo h2 {
       margin: 5px 0;
     }
+
     .tabela-rifas {
       display: grid;
       grid-template-columns: repeat(10, 1fr);
       gap: 5px;
       margin-top: 20px;
     }
+
     .numero {
       border: 1px solid red;
       padding: 10px;
       text-align: center;
       cursor: pointer;
     }
+
     .comprado {
       background-color: #f44336;
       color: white;
     }
+
     button {
       margin-top: 20px;
       padding: 10px 15px;
       font-size: 16px;
     }
+
     .botoes-pagina {
       margin-top: 20px;
     }
+
     .botoes-pagina button {
       margin-right: 10px;
     }
@@ -102,11 +111,15 @@
     window.mostrarPagina = mostrarPagina;
 
     window.gerarImagem = () => {
-      const alvo = document.documentElement;
+      const alvo = document.body;
       html2canvas(alvo, {
-        scrollY: -window.scrollY,
-        windowWidth: document.documentElement.scrollWidth,
-        windowHeight: document.documentElement.scrollHeight
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        width: document.body.scrollWidth,
+        height: document.body.scrollHeight,
+        windowWidth: document.body.scrollWidth,
+        windowHeight: document.body.scrollHeight
       }).then(canvas => {
         const imagem = canvas.toDataURL("image/png");
 
@@ -122,11 +135,12 @@
     mostrarPagina(1);
   </script>
 </head>
+
 <body>
   <div class="topo" id="topo">
     <h2>🎟️ Rifa Solidária - R$ 5,00</h2>
-    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - <span id="premio1" contenteditable="true">Edite aqui o prêmio</span></p>
-    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - <span id="premio2" contenteditable="true">Edite aqui o prêmio</span></p>
+    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - Maffi</p>
+    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - Bella Trento</p>
     <p><strong>Sorteio:</strong> <span id="dataSorteio" contenteditable="true">19/08</span></p>
   </div>
 
@@ -142,4 +156,5 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
+
 </html>
