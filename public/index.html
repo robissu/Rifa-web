@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,51 +9,43 @@
       font-family: Arial, sans-serif;
       padding: 20px;
     }
-
     .topo {
       margin-bottom: 20px;
     }
-
     .topo h2 {
       margin: 5px 0;
     }
-
     .tabela-rifas {
       display: grid;
       grid-template-columns: repeat(10, 1fr);
       gap: 5px;
       margin-top: 20px;
     }
-
     .numero {
       border: 1px solid red;
       padding: 10px;
       text-align: center;
       cursor: pointer;
     }
-
     .comprado {
       background-color: #f44336;
       color: white;
     }
-
     button {
       margin-top: 20px;
       padding: 10px 15px;
       font-size: 16px;
     }
-
     .botoes-pagina {
       margin-top: 20px;
     }
-
     .botoes-pagina button {
       margin-right: 10px;
     }
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAvSQn-RYyajflSDiySsVey--pZJAtzrMw",
@@ -71,7 +62,7 @@
     const db = getDatabase(app);
 
     const container = document.getElementById('rifaContainer');
-    const totalPaginas = 4;
+    const totalPaginas = 3;
     const numerosPorPagina = 250;
     let paginaAtual = 1;
     let estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
@@ -85,67 +76,57 @@
         const div = document.createElement('div');
         div.textContent = i;
         div.classList.add('numero');
-
-        const indexGlobal = i - 1; // índice correto na array global (0 a 999)
-
-        if (estadoNumeros[indexGlobal]) {
-          div.classList.add('comprado');
-        }
-
+        if (estadoNumeros[i - 1]) div.classList.add('comprado');
         div.onclick = () => {
-          const novoEstado = !estadoNumeros[indexGlobal];
-          set(ref(db, 'rifas/' + indexGlobal), novoEstado);
+          const novoEstado = !estadoNumeros[i - 1];
+          set(ref(db, 'rifas/' + (i - 1)), novoEstado);
         };
-
         container.appendChild(div);
       }
     }
-
 
     function mostrarPagina(pagina) {
       paginaAtual = pagina;
       atualizarInterface();
     }
 
-    // Carregar dados do Firebase e ouvir mudanças em tempo real
     const estadoRef = ref(db, 'rifas');
     onValue(estadoRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
-        Object.entries(data).forEach(([index, valor]) => {
-          estadoNumeros[parseInt(index)] = valor;
-        });
-
+        estadoNumeros = Object.values(data);
         atualizarInterface();
       }
     });
 
     window.mostrarPagina = mostrarPagina;
 
-    window.gerarPDF = () => {
-      const { jsPDF } = window.jspdf;
-      html2canvas(document.body).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`rifa_pagina_${paginaAtual}.pdf`);
+    window.gerarImagem = () => {
+      const alvo = document.documentElement;
+      html2canvas(alvo, {
+        scrollY: -window.scrollY,
+        windowWidth: document.documentElement.scrollWidth,
+        windowHeight: document.documentElement.scrollHeight
+      }).then(canvas => {
+        const imagem = canvas.toDataURL("image/png");
+
+        const link = document.createElement('a');
+        link.href = imagem;
+        link.download = `rifa_pagina_${paginaAtual}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       });
-    };
+    }
 
     mostrarPagina(1);
   </script>
 </head>
-
 <body>
   <div class="topo" id="topo">
     <h2>🎟️ Rifa Solidária - R$ 5,00</h2>
-    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - <span id="premio1" contenteditable="true">Edite aqui o
-        prêmio</span></p>
-    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - <span id="premio2" contenteditable="true">Edite aqui o
-        prêmio</span></p>
+    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - <span id="premio1" contenteditable="true">Edite aqui o prêmio</span></p>
+    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - <span id="premio2" contenteditable="true">Edite aqui o prêmio</span></p>
     <p><strong>Sorteio:</strong> <span id="dataSorteio" contenteditable="true">19/08</span></p>
   </div>
 
@@ -153,15 +134,12 @@
     <button onclick="mostrarPagina(1)">Página 1</button>
     <button onclick="mostrarPagina(2)">Página 2</button>
     <button onclick="mostrarPagina(3)">Página 3</button>
-    <button onclick="mostrarPagina(4)">Página 4</button>
   </div>
 
   <div class="tabela-rifas" id="rifaContainer"></div>
 
-  <button onclick="gerarPDF()">📄 Gerar PDF da Página Atual</button>
+  <button onclick="gerarImagem()">🖼️ Gerar imagem da Página Atual</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
-
 </html>
