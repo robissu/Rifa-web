@@ -43,6 +43,79 @@
       margin-right: 10px;
     }
   </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvSQn-RYyajflSDiySsVey--pZJAtzrMw",
+      authDomain: "rifa-web-c0430.firebaseapp.com",
+      databaseURL: "https://rifa-web-c0430-default-rtdb.firebaseio.com",
+      projectId: "rifa-web-c0430",
+      storageBucket: "rifa-web-c0430.firebasestorage.app",
+      messagingSenderId: "860286230035",
+      appId: "1:860286230035:web:8455e3fc1a34391392e9e6",
+      measurementId: "G-RLSBNRR0FW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const container = document.getElementById('rifaContainer');
+    const totalPaginas = 4;
+    const numerosPorPagina = 250;
+    let paginaAtual = 1;
+    let estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
+
+    function atualizarInterface() {
+      container.innerHTML = '';
+      const inicio = (paginaAtual - 1) * numerosPorPagina + 1;
+      const fim = paginaAtual * numerosPorPagina;
+
+      for (let i = inicio; i <= fim; i++) {
+        const div = document.createElement('div');
+        div.textContent = i;
+        div.classList.add('numero');
+        if (estadoNumeros[i - 1]) div.classList.add('comprado');
+        div.onclick = () => {
+          const novoEstado = !estadoNumeros[i - 1];
+          set(ref(db, 'rifas/' + (i - 1)), novoEstado);
+        };
+        container.appendChild(div);
+      }
+    }
+
+    function mostrarPagina(pagina) {
+      paginaAtual = pagina;
+      atualizarInterface();
+    }
+
+    // Carregar dados do Firebase e ouvir mudanças em tempo real
+    const estadoRef = ref(db, 'rifas');
+    onValue(estadoRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        estadoNumeros = Object.values(data);
+        atualizarInterface();
+      }
+    });
+
+    window.mostrarPagina = mostrarPagina;
+
+    window.gerarPDF = () => {
+      const { jsPDF } = window.jspdf;
+      html2canvas(document.body).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`rifa_pagina_${paginaAtual}.pdf`);
+      });
+    };
+
+    mostrarPagina(1);
+  </script>
 </head>
 <body>
   <div class="topo" id="topo">
@@ -65,49 +138,5 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
-    const container = document.getElementById('rifaContainer');
-    const totalPaginas = 4;
-    const numerosPorPagina = 250;
-    let estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
-    let paginaAtual = 1;
-
-    function mostrarPagina(pagina) {
-      paginaAtual = pagina;
-      container.innerHTML = '';
-      const inicio = (pagina - 1) * numerosPorPagina + 1;
-      const fim = pagina * numerosPorPagina;
-
-      for (let i = inicio; i <= fim; i++) {
-        const div = document.createElement('div');
-        div.textContent = i;
-        div.classList.add('numero');
-        if (estadoNumeros[i - 1]) div.classList.add('comprado');
-        div.onclick = () => {
-          estadoNumeros[i - 1] = !estadoNumeros[i - 1];
-          div.classList.toggle('comprado');
-        };
-        container.appendChild(div);
-      }
-    }
-
-    function gerarPDF() {
-      const { jsPDF } = window.jspdf;
-      const elementoParaCaptura = document.body;
-
-      html2canvas(elementoParaCaptura).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`rifa_pagina_${paginaAtual}.pdf`);
-      });
-    }
-
-    mostrarPagina(1);
-  </script>
 </body>
 </html>
