@@ -38,6 +38,11 @@
       color: white;
     }
 
+    .selecionado {
+      background-color: #4caf50;
+      color: white;
+    }
+
     button {
       margin-top: 20px;
       padding: 10px 15px;
@@ -51,10 +56,18 @@
     .botoes-pagina button {
       margin-right: 10px;
     }
+
+    #botaoComprar {
+      display: none;
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      margin-top: 30px;
+    }
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAvSQn-RYyajflSDiySsVey--pZJAtzrMw",
@@ -71,13 +84,17 @@
     const db = getDatabase(app);
 
     const container = document.getElementById('rifaContainer');
+    const botaoComprar = document.getElementById('botaoComprar');
     const totalPaginas = 4;
     const numerosPorPagina = 250;
     let paginaAtual = 1;
     let estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
+    let selecionados = [];
 
     function atualizarInterface() {
       container.innerHTML = '';
+      selecionados = [];
+      botaoComprar.style.display = 'none';
       const inicio = (paginaAtual - 1) * numerosPorPagina + 1;
       const fim = paginaAtual * numerosPorPagina;
 
@@ -85,29 +102,35 @@
         const div = document.createElement('div');
         div.textContent = i;
         div.classList.add('numero');
-
-        const indexGlobal = i - 1; // índice correto na array global (0 a 999)
+        const indexGlobal = i - 1;
 
         if (estadoNumeros[indexGlobal]) {
           div.classList.add('comprado');
         }
 
         div.onclick = () => {
-          const novoEstado = !estadoNumeros[indexGlobal];
-          set(ref(db, 'rifas/' + indexGlobal), novoEstado);
+          if (estadoNumeros[indexGlobal]) return; // não marca vendidos
+          div.classList.toggle('selecionado');
+          const selecionado = div.classList.contains('selecionado');
+
+          if (selecionado) {
+            selecionados.push(i);
+          } else {
+            selecionados = selecionados.filter(n => n !== i);
+          }
+
+          botaoComprar.style.display = selecionados.length > 0 ? 'inline-block' : 'none';
         };
 
         container.appendChild(div);
       }
     }
 
-
     function mostrarPagina(pagina) {
       paginaAtual = pagina;
       atualizarInterface();
     }
 
-    // Carregar dados do Firebase e ouvir mudanças em tempo real
     const estadoRef = ref(db, 'rifas');
     onValue(estadoRef, (snapshot) => {
       const data = snapshot.val();
@@ -116,7 +139,6 @@
         Object.entries(data).forEach(([index, valor]) => {
           estadoNumeros[parseInt(index)] = valor;
         });
-
         atualizarInterface();
       }
     });
@@ -144,6 +166,38 @@
       });
     };
 
+    window.comprarSelecionados = () => {
+      const alvo = document.createElement('div');
+      alvo.style.padding = '20px';
+      alvo.style.fontFamily = 'Arial';
+      alvo.innerHTML = `
+        <h2>Comprovante de Compra</h2>
+        <p><strong>Números comprados:</strong> ${selecionados.join(', ')}</p>
+        <p><strong>Data:</strong> ${new Date().toLocaleString()}</p>
+      `;
+
+      document.body.appendChild(alvo);
+
+      html2canvas(alvo).then(canvas => {
+        const imagem = canvas.toDataURL("image/png");
+        const link = document.createElement('a');
+        link.href = imagem;
+        link.download = `comprovante_rifa.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        document.body.removeChild(alvo);
+
+        // Marcar no banco de dados
+        selecionados.forEach(num => {
+          const indexGlobal = num - 1;
+          set(ref(db, 'rifas/' + indexGlobal), true);
+        });
+
+        selecionados = [];
+        botaoComprar.style.display = 'none';
+      });
+    };
 
     mostrarPagina(1);
   </script>
@@ -151,12 +205,11 @@
 
 <body>
   <div class="topo" id="topo">
-    <h2>🎟️ Rifa Solidária - R$ 5,00</h2>
-    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - <span id="premio1" contenteditable="true">Edite aqui o
-        prêmio</span></p>
-    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - <span id="premio2" contenteditable="true">Edite aqui o
-        prêmio</span></p>
-    <p><strong>Sorteio:</strong> <span id="dataSorteio" contenteditable="true">19/08</span></p>
+    <h2>🎟️ Rifa Solidária - R$ 5,00 - Sorteio na Loteria Federal</h2>
+    <h2>💸 PIX: 38078309015 </h2>
+    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - Maffi</p>
+    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - Bella Trento</p>
+    <p><strong>Sorteio:</strong> 19/08</p>
   </div>
 
   <div class="botoes-pagina">
@@ -168,11 +221,10 @@
 
   <div class="tabela-rifas" id="rifaContainer"></div>
 
+  <button id="botaoComprar" onclick="comprarSelecionados()">🛒 Comprar Números Selecionados</button>
   <button onclick="gerarImagem()">🖼️ Gerar Imagem da Página Atual</button>
 
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 
 </html>
