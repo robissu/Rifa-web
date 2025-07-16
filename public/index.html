@@ -86,19 +86,21 @@
         div.textContent = i;
         div.classList.add('numero');
 
-        const index = i - 1; // fixar o índice
+        const indexGlobal = i - 1; // índice correto na array global (0 a 999)
 
-        if (estadoNumeros[index]) div.classList.add('comprado');
+        if (estadoNumeros[indexGlobal]) {
+          div.classList.add('comprado');
+        }
 
         div.onclick = () => {
-          const novoEstado = !estadoNumeros[index];
-          set(ref(db, 'rifas/' + index), novoEstado);
+          const novoEstado = !estadoNumeros[indexGlobal];
+          set(ref(db, 'rifas/' + indexGlobal), novoEstado);
         };
 
         container.appendChild(div);
       }
-
     }
+
 
     function mostrarPagina(pagina) {
       paginaAtual = pagina;
