@@ -85,8 +85,8 @@
 
     const container = document.getElementById('rifaContainer');
     const botaoComprar = document.getElementById('botaoComprar');
-    const totalPaginas = 4;
-    const numerosPorPagina = 250;
+    const totalPaginas = 1;
+    const numerosPorPagina = 100;
     let paginaAtual = 1;
     let estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
     let selecionados = [];
@@ -205,24 +205,14 @@
 
 <body>
   <div class="topo" id="topo">
-    <h2>🎟️ Rifa Solidária - R$ 5,00 - Sorteio na Loteria Federal</h2>
+    <h2>🎟️ Ação Solidária - R$ 5,00 - Sorteio na Loteria Federal</h2>
     <h2>💸 PIX: 38078309015 </h2>
-    <h3>Esta rifa foi criada com um propósito nobre: ajudar um amigo querido que está passando por um momento difícil. Toda a arrecadação será destinada a apoiar essa pessoa em suas necessidades mais urgentes, seja com tratamento de saúde, despesas essenciais ou qualquer outra forma de suporte.
-
-Ao participar, você não está apenas concorrendo a prêmios — está fazendo parte de uma corrente de solidariedade e amor ao próximo.
-
-Agradecemos imensamente sua contribuição. Juntos, podemos fazer a diferença. ❤️</h3>
-    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - Maffi</p>
-    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - Bella Trento</p>
-    <p><strong>Sorteio:</strong> 19/08</p>
+    <h2>💸 PIX: (55) 992192111 </h2>
+    <h3>Essa ação é em prol ao dia da criança, o prêmio será de: (1)Um cento de salgadinhos variados(pastel, risólis, canudinhos) mais uma Coca Cola 3l.
+      Sorteio dia 11/10/2025 pela loteria federal. Vale no sorteio somente os finais ❤️</h3>
+    <p><strong>Sorteio:</strong> 11/10/2025</p>
   </div>
 
-  <div class="botoes-pagina">
-    <button onclick="mostrarPagina(1)">Página 1</button>
-    <button onclick="mostrarPagina(2)">Página 2</button>
-    <button onclick="mostrarPagina(3)">Página 3</button>
-    <button onclick="mostrarPagina(4)">Página 4</button>
-  </div>
 
   <div class="tabela-rifas" id="rifaContainer"></div>
 
