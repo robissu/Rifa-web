@@ -148,6 +148,31 @@
       }
     }
 
+    function renderizarBotoes() {
+      const paginacaoDiv = document.getElementById('paginacao');
+      paginacaoDiv.innerHTML = ''; // Limpa os botões antes de criar
+
+      for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = `Página ${i}`;
+
+        // Destaca o botão da página atual
+        if (i === paginaAtual) {
+          btn.style.backgroundColor = '#2196f3';
+          btn.style.color = 'white';
+        }
+
+        btn.onclick = () => {
+          mostrarPagina(i);
+          renderizarBotoes(); // Atualiza o destaque dos botões
+        };
+        paginacaoDiv.appendChild(btn);
+      }
+    }
+
+    
+
+
     function mostrarPagina(pagina) {
       paginaAtual = pagina;
       atualizarInterface();
@@ -222,6 +247,8 @@
     };
 
     mostrarPagina(1);
+    // Chame essa função no final do seu script para ela carregar ao abrir o site
+    renderizarBotoes();
   </script>
 </head>
 
@@ -251,6 +278,8 @@
 
 
   <div class="tabela-rifas" id="rifaContainer"></div>
+
+  <div class="botoes-pagina" id="paginacao"></div>
 
   <button id="botaoComprar" onclick="comprarSelecionados()">🛒 Comprar Números Selecionados</button>
   <button onclick="gerarImagem()">🖼️ Gerar Imagem da Página Atual</button>
