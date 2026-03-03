@@ -64,28 +64,6 @@
       border: none;
       margin-top: 30px;
     }
-
-    /* Adicione isso no final do seu bloco de estilo */
-    .img-rifa {
-      width: 100%;
-      /* A imagem se ajusta à largura da tela */
-      max-width: 450px;
-      /* Mas não passa de 450px para não ficar gigante */
-      height: auto;
-      /* Mantém a proporção */
-      border-radius: 12px;
-      /* Deixa as pontas arredondadas */
-      margin: 10px 0 25px 0;
-      /* Espaço entre a imagem e o próximo texto */
-      display: block;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      /* Sombra suave para destacar */
-    }
-
-    .premio-item {
-      text-align: center;
-      /* Centraliza os títulos e imagens dos prêmios */
-    }
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -107,8 +85,8 @@
 
     const container = document.getElementById('rifaContainer');
     const botaoComprar = document.getElementById('botaoComprar');
-    const totalPaginas = 5;
-    const numerosPorPagina = 100;
+    const totalPaginas = 4;
+    const numerosPorPagina = 250;
     let paginaAtual = 1;
     let estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
     let selecionados = [];
@@ -147,31 +125,6 @@
         container.appendChild(div);
       }
     }
-
-    function renderizarBotoes() {
-      const paginacaoDiv = document.getElementById('paginacao');
-      paginacaoDiv.innerHTML = ''; // Limpa os botões antes de criar
-
-      for (let i = 1; i <= totalPaginas; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = `Página ${i}`;
-
-        // Destaca o botão da página atual
-        if (i === paginaAtual) {
-          btn.style.backgroundColor = '#2196f3';
-          btn.style.color = 'white';
-        }
-
-        btn.onclick = () => {
-          mostrarPagina(i);
-          renderizarBotoes(); // Atualiza o destaque dos botões
-        };
-        paginacaoDiv.appendChild(btn);
-      }
-    }
-
-    
-
 
     function mostrarPagina(pagina) {
       paginaAtual = pagina;
@@ -247,39 +200,31 @@
     };
 
     mostrarPagina(1);
-    // Chame essa função no final do seu script para ela carregar ao abrir o site
-    renderizarBotoes();
   </script>
 </head>
 
 <body>
   <div class="topo" id="topo">
-    <h2>🎟️ Ação Solidária - R$ 5,00 - Sorteio na Loteria Federal</h2>
-    <h2>💸 PIX: 04731629039 </h2>
-    <h3>Está rifa e para um tratamento de saúde da minha esposa ...(nome)</h3>
-    <h3>Premios:</h3>
+    <h2>🎟️ Rifa Solidária - R$ 5,00 - Sorteio na Loteria Federal</h2>
+    <h2>💸 PIX: 38078309015 </h2>
+    <h3>Esta rifa foi criada com um propósito nobre: ajudar um amigo querido que está passando por um momento difícil. Toda a arrecadação será destinada a apoiar essa pessoa em suas necessidades mais urgentes, seja com tratamento de saúde, despesas essenciais ou qualquer outra forma de suporte.
 
-    <div class="premio-item">
-      <h3>Fogão Cooktop</h3>
-      <img src="img/fogao.jpg" alt="Fogão Cooktop" class="img-rifa">
-    </div>
+Ao participar, você não está apenas concorrendo a prêmios — está fazendo parte de uma corrente de solidariedade e amor ao próximo.
 
-    <div class="premio-item">
-      <h3>Batedeira</h3>
-      <img src="img/batedeira.jpg" alt="Batedeira" class="img-rifa">
-    </div>
-
-    <div class="premio-item">
-      <h3>Liquidificador</h3>
-      <img src="img/liquidificador.jpg" alt="Liquidificador" class="img-rifa">
-    </div>
-    <p><strong>Sorteio:</strong> 16/05/2026</p>
+Agradecemos imensamente sua contribuição. Juntos, podemos fazer a diferença. ❤️</h3>
+    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - Maffi</p>
+    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - Bella Trento</p>
+    <p><strong>Sorteio:</strong> 19/08</p>
   </div>
 
+  <div class="botoes-pagina">
+    <button onclick="mostrarPagina(1)">Página 1</button>
+    <button onclick="mostrarPagina(2)">Página 2</button>
+    <button onclick="mostrarPagina(3)">Página 3</button>
+    <button onclick="mostrarPagina(4)">Página 4</button>
+  </div>
 
   <div class="tabela-rifas" id="rifaContainer"></div>
-
-  <div class="botoes-pagina" id="paginacao"></div>
 
   <button id="botaoComprar" onclick="comprarSelecionados()">🛒 Comprar Números Selecionados</button>
   <button onclick="gerarImagem()">🖼️ Gerar Imagem da Página Atual</button>
