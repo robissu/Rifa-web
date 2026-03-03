@@ -85,8 +85,8 @@
 
     const container = document.getElementById('rifaContainer');
     const botaoComprar = document.getElementById('botaoComprar');
-    const totalPaginas = 4;
-    const numerosPorPagina = 250;
+    const totalPaginas = 5;
+    const numerosPorPagina = 100;
     let paginaAtual = 1;
     let estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
     let selecionados = [];
@@ -206,15 +206,12 @@
 <body>
   <div class="topo" id="topo">
     <h2>🎟️ Rifa Solidária - R$ 5,00 - Sorteio na Loteria Federal</h2>
-    <h2>💸 PIX: 38078309015 </h2>
-    <h3>Esta rifa foi criada com um propósito nobre: ajudar um amigo querido que está passando por um momento difícil. Toda a arrecadação será destinada a apoiar essa pessoa em suas necessidades mais urgentes, seja com tratamento de saúde, despesas essenciais ou qualquer outra forma de suporte.
-
-Ao participar, você não está apenas concorrendo a prêmios — está fazendo parte de uma corrente de solidariedade e amor ao próximo.
-
-Agradecemos imensamente sua contribuição. Juntos, podemos fazer a diferença. ❤️</h3>
-    <p><strong>1º Prêmio:</strong> 2 rodízios de pizza - Maffi</p>
-    <p><strong>2º Prêmio:</strong> 2 rodízios de pizza - Bella Trento</p>
-    <p><strong>Sorteio:</strong> 19/08</p>
+    <h2>💸 PIX: 04731629039 </h2>
+    <h3>Esta rifa foi criada com o objetivo de ajudar a ....(nome) ❤️</h3>
+    <p><strong>1º Prêmio:</strong> Fogão CookTop</p>
+    <p><strong>2º Prêmio:</strong> Batedeira </p>
+    <p><strong>3º Prêmio:</strong> Liquidificador </p>
+    <p><strong>Sorteio:</strong> 16/05/2026</p>
   </div>
 
   <div class="botoes-pagina">
@@ -222,6 +219,7 @@ Agradecemos imensamente sua contribuição. Juntos, podemos fazer a diferença. 
     <button onclick="mostrarPagina(2)">Página 2</button>
     <button onclick="mostrarPagina(3)">Página 3</button>
     <button onclick="mostrarPagina(4)">Página 4</button>
+    <button onclick="mostrarPagina(5)">Página 5</button>
   </div>
 
   <div class="tabela-rifas" id="rifaContainer"></div>
