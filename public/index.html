@@ -83,6 +83,69 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       /* Sombra para destaque */
     }
+
+    /* Alinha os cards um ao lado do outro e centraliza na tela */
+    .secao-premios {
+      display: flex;
+      flex-direction: row;
+      /* Força a ficar lado a lado */
+      justify-content: center;
+      /* Centraliza o bloco todo */
+      align-items: flex-start;
+      /* Alinha por cima */
+      gap: 10px;
+      /* Espaço entre os cards */
+      margin: 20px 0;
+      flex-wrap: nowrap;
+      /* Impede que elas pulem linha no computador */
+    }
+
+    /* Configuração de cada card individual */
+    .premio-card {
+      width: 130px;
+      /* Largura bem pequena para caberem lado a lado */
+      text-align: center;
+      font-size: 12px;
+      /* Diminui um pouco o texto para combinar */
+    }
+
+    .premio-card p {
+      margin: 0;
+      color: #d32f2f;
+      font-weight: bold;
+    }
+
+    .premio-card span {
+      display: block;
+      margin-bottom: 5px;
+      min-height: 30px;
+      /* Mantém os nomes alinhados */
+    }
+
+    /* Ajuste final da imagem */
+    .img-rifa {
+      width: 100%;
+      /* Ocupa os 130px do card */
+      height: 100px;
+      /* Altura fixa para ficarem iguais */
+      object-fit: cover;
+      /* Não deixa a imagem distorcer */
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    /* Ajuste para celular: se a tela for muito pequena, elas diminuem mais */
+    @media (max-width: 450px) {
+      .premio-card {
+        width: 30%;
+        /* No celular, cada uma ocupa 30% da largura */
+      }
+
+      .img-rifa {
+        height: 70px;
+        /* Foto menor ainda no celular */
+      }
+    }
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -228,11 +291,11 @@
     <h2>💸 PIX: 04731629039 </h2>
     <h3>Esta rifa foi criada com o objetivo de ajudar a ....(nome) ❤️</h3>
 
-    <div class="container-premios">
+    <div class="secao-premios">
       <div class="premio-card">
         <p><strong>1º Prêmio</strong></p>
         <span>Fogão CookTop</span>
-        <img src="img/fogao.jpg" alt="Fogão Cooktop" class="img-rifa">
+        <img src="img/fogao.jpg" alt="Fogão" class="img-rifa">
       </div>
 
       <div class="premio-card">
