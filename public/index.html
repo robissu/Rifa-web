@@ -64,6 +64,28 @@
       border: none;
       margin-top: 30px;
     }
+
+    /* Adicione isso no final do seu bloco de estilo */
+    .img-rifa {
+      width: 100%;
+      /* A imagem se ajusta à largura da tela */
+      max-width: 450px;
+      /* Mas não passa de 450px para não ficar gigante */
+      height: auto;
+      /* Mantém a proporção */
+      border-radius: 12px;
+      /* Deixa as pontas arredondadas */
+      margin: 10px 0 25px 0;
+      /* Espaço entre a imagem e o próximo texto */
+      display: block;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Sombra suave para destacar */
+    }
+
+    .premio-item {
+      text-align: center;
+      /* Centraliza os títulos e imagens dos prêmios */
+    }
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -208,6 +230,22 @@
     <h2>🎟️ Ação Solidária - R$ 5,00 - Sorteio na Loteria Federal</h2>
     <h2>💸 PIX: 04731629039 </h2>
     <h3>Está rifa e para um tratamento de saúde da minha esposa ...(nome)</h3>
+    <h3>Premios:</h3>
+
+    <div class="premio-item">
+      <h3>Fogão Cooktop</h3>
+      <img src="img/fogao.jpg" alt="Fogão Cooktop" class="img-rifa">
+    </div>
+
+    <div class="premio-item">
+      <h3>Batedeira</h3>
+      <img src="img/batedeira.jpg" alt="Batedeira" class="img-rifa">
+    </div>
+
+    <div class="premio-item">
+      <h3>Liquidificador</h3>
+      <img src="img/liquidificador.jpg" alt="Liquidificador" class="img-rifa">
+    </div>
     <p><strong>Sorteio:</strong> 16/05/2026</p>
   </div>
 
