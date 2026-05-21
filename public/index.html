@@ -6,148 +6,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rifa Solidária</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; background-color: #f5f5f5; color: #333; }
+    .topo { margin-bottom: 20px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .topo h2 { margin: 5px 0; color: #2c3e50; }
+    
+    /* Chaves PIX */
+    .pix-container { background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 15px auto; max-width: 500px; border: 1px dashed #2196f3; }
+    .pix-chave { font-size: 18px; font-weight: bold; color: #0d47a1; }
 
-    .topo {
-      margin-bottom: 20px;
-    }
+    /* Imagens dos Prêmios Lado a Lado */
+    .secao-premios { display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+    .premio-card { width: 140px; text-align: center; font-size: 12px; background: #fff; padding: 8px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee; }
+    .premio-card p { margin: 0; color: #d32f2f; font-weight: bold; }
+    .premio-card span { display: block; margin-bottom: 5px; min-height: 35px; font-weight: bold; }
+    .img-rifa { width: 100%; height: 100px; object-fit: cover; border-radius: 6px; border: 1px solid #eee; }
 
-    .topo h2 {
-      margin: 5px 0;
-    }
+    /* Campos de Cadastro do Comprador */
+    .cadastro-container { background: white; padding: 20px; border-radius: 12px; max-width: 500px; margin: 20px auto; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left; display: none; }
+    .cadastro-container h3 { margin-top: 0; color: #2c3e50; text-align: center; }
+    .campo-grupo { margin-bottom: 12px; }
+    .campo-grupo label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    .campo-grupo input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
 
-    .tabela-rifas {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 5px;
-      margin-top: 20px;
-    }
+    /* Tabela de Rifas */
+    .tabela-rifas { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .numero { border: 1px solid #ccc; padding: 10px 2px; font-size: 14px; text-align: center; cursor: pointer; background: white; border-radius: 4px; font-weight: bold; }
+    .comprado { background-color: #f44336; color: white; cursor: not-allowed; border-color: #f44336; }
+    .selecionado { background-color: #4caf50; color: white; border-color: #4caf50; }
 
-    .numero {
-      border: 1px solid red;
-      padding: 8px 2px;
-      font-size: 14px;
-      text-align: center;
-      cursor: pointer;
-    }
+    /* Paginação */
+    .botoes-pagina { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
+    .botoes-pagina button { padding: 8px 12px; font-size: 14px; cursor: pointer; border: 1px solid #ccc; background: white; border-radius: 4px; }
+    .btn-ativo { background-color: #2196f3 !important; color: white; font-weight: bold; border-color: #2196f3 !important; }
 
-    .comprado {
-      background-color: #f44336;
-      color: white;
+    /* Botão de Compra */
+    #botaoComprar { background-color: #2196f3; color: white; border: none; width: 100%; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+    
+    /* Design do Comprovante Estilizado baseado no modelo enviado */
+    #comprovante-template { 
+      width: 380px; background: #ffffff; border: 2px solid #2c3e50; border-radius: 15px; 
+      padding: 25px; font-family: 'Courier New', Courier, monospace; text-align: left; 
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15); display: none; position: absolute; left: -9999px;
     }
-
-    .selecionado {
-      background-color: #4caf50;
-      color: white;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 15px;
-      font-size: 16px;
-    }
-
-    .botoes-pagina {
-      margin-top: 20px;
-    }
-
-    .botoes-pagina button {
-      margin-right: 10px;
-    }
-
-    #botaoComprar {
-      display: none;
-      background-color: #2196f3;
-      color: white;
-      border: none;
-      margin-top: 30px;
-    }
-
-    /* Estilo para as imagens dos prêmios */
-    .premio-item {
-      margin-bottom: 30px;
-      /* Espaço entre um prêmio e outro */
-      text-align: center;
-    }
-
-    .img-rifa {
-      width: 100%;
-      max-width: 400px;
-      /* Tamanho máximo da foto */
-      height: auto;
-      border-radius: 15px;
-      /* Bordas arredondadas */
-      margin-top: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      /* Sombra para destaque */
-    }
-
-    /* Alinha os cards um ao lado do outro e centraliza na tela */
-    .secao-premios {
-      display: flex;
-      flex-direction: row;
-      /* Força a ficar lado a lado */
-      justify-content: center;
-      /* Centraliza o bloco todo */
-      align-items: flex-start;
-      /* Alinha por cima */
-      gap: 10px;
-      /* Espaço entre os cards */
-      margin: 20px 0;
-      flex-wrap: nowrap;
-      /* Impede que elas pulem linha no computador */
-    }
-
-    /* Configuração de cada card individual */
-    .premio-card {
-      width: 130px;
-      /* Largura bem pequena para caberem lado a lado */
-      text-align: center;
-      font-size: 12px;
-      /* Diminui um pouco o texto para combinar */
-    }
-
-    .premio-card p {
-      margin: 0;
-      color: #d32f2f;
-      font-weight: bold;
-    }
-
-    .premio-card span {
-      display: block;
-      margin-bottom: 5px;
-      min-height: 30px;
-      /* Mantém os nomes alinhados */
-    }
-
-    /* Ajuste final da imagem */
-    .img-rifa {
-      width: 100%;
-      /* Ocupa os 130px do card */
-      height: 100px;
-      /* Altura fixa para ficarem iguais */
-      object-fit: cover;
-      /* Não deixa a imagem distorcer */
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    /* Ajuste para celular: se a tela for muito pequena, elas diminuem mais */
-    @media (max-width: 450px) {
-      .premio-card {
-        width: 30%;
-        /* No celular, cada uma ocupa 30% da largura */
-      }
-
-      .img-rifa {
-        height: 70px;
-        /* Foto menor ainda no celular */
-      }
-    }
+    .comp-header { text-align: center; border-bottom: 2px dashed #2c3e50; padding-bottom: 12px; margin-bottom: 12px; }
+    .comp-title { font-size: 20px; font-weight: bold; margin: 0; color: #2c3e50; }
+    .comp-subtitle { font-size: 13px; margin: 4px 0 0 0; color: #7f8c8d; }
+    .comp-body p { margin: 6px 0; font-size: 14px; line-height: 1.4; }
+    .comp-subsecao { border-top: 1px dashed #ccc; padding-top: 8px; margin-top: 8px; }
+    .comp-numeros { background: #f8f9fa; border: 1px solid #dcdde1; padding: 8px; border-radius: 6px; font-size: 16px; font-weight: bold; color: #27ae60; word-wrap: break-word; letter-spacing: 1px; }
+    .comp-footer { text-align: center; border-top: 2px dashed #2c3e50; margin-top: 15px; padding-top: 12px; font-size: 11px; color: #7f8c8d; }
   </style>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
@@ -167,17 +76,21 @@
     const db = getDatabase(app);
 
     const container = document.getElementById('rifaContainer');
-    const botaoComprar = document.getElementById('botaoComprar');
-    const totalPaginas = 5;
+    const painelCadastro = document.getElementById('painelCadastro');
+    const pixInstrucao = document.getElementById('pixInstrucao');
+    
+    const totalPaginas = 10; 
     const numerosPorPagina = 100;
     let paginaAtual = 1;
-    let estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
+    let estadoNumeros = Array.from({ length: 1000 }, () => false);
     let selecionados = [];
+
+    // CONFIGURAÇÃO DAS DUAS CHAVES PIX
+    const CHAVE_PIX_1 = "04731629039"; // Números 001 a 500
+    const CHAVE_PIX_2 = "018.541.620-98"; // Números 501 a 1000
 
     function atualizarInterface() {
       container.innerHTML = '';
-      selecionados = [];
-      botaoComprar.style.display = 'none';
       const inicio = (paginaAtual - 1) * numerosPorPagina + 1;
       const fim = paginaAtual * numerosPorPagina;
 
@@ -192,143 +105,188 @@
         }
 
         div.onclick = () => {
-          if (estadoNumeros[indexGlobal]) return; // não marca vendidos
+          if (estadoNumeros[indexGlobal]) return;
           div.classList.toggle('selecionado');
-          const selecionado = div.classList.contains('selecionado');
-
-          if (selecionado) {
+          
+          if (div.classList.contains('selecionado')) {
             selecionados.push(i);
           } else {
             selecionados = selecionados.filter(n => n !== i);
           }
-
-          botaoComprar.style.display = selecionados.length > 0 ? 'inline-block' : 'none';
+          
+          selecionados.sort((a, b) => a - b);
+          atualizarPainelAcoes();
         };
-
         container.appendChild(div);
+      }
+      renderizarBotoes();
+    }
+
+    function atualizarPainelAcoes() {
+      if (selecionados.length > 0) {
+        painelCadastro.style.display = 'block';
+        
+        const temNaPrimeiraMetade = selecionados.some(n => n <= 500);
+        const temNaSegundaMetade = selecionados.some(n => n > 500);
+
+        if (temNaPrimeiraMetade && temNaSegundaMetade) {
+          pixInstrucao.innerHTML = `Você escolheu números de lotes diferentes.<br>Pague os números até 500 na chave:<br><span class="pix-chave">${CHAVE_PIX_1}</span><br>E os números acima de 500 na chave:<br><span class="pix-chave">${CHAVE_PIX_2}</span>`;
+        } else if (temNaSegundaMetade) {
+          pixInstrucao.innerHTML = `Efetue o PIX para a chave:<br><span class="pix-chave">${CHAVE_PIX_2}</span>`;
+        } else {
+          pixInstrucao.innerHTML = `Efetue o PIX para a chave:<br><span class="pix-chave">${CHAVE_PIX_1}</span>`;
+        }
+      } else {
+        painelCadastro.style.display = 'none';
+        pixInstrucao.innerHTML = "Selecione os números desejados abaixo para gerar o pagamento.";
       }
     }
 
-    function mostrarPagina(pagina) {
-      paginaAtual = pagina;
-      atualizarInterface();
+    function renderizarBotoes() {
+      const paginacaoDiv = document.getElementById('paginacao');
+      paginacaoDiv.innerHTML = '';
+      for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = `Pág ${i}`;
+        if (i === paginaAtual) btn.classList.add('btn-ativo');
+        btn.onclick = () => {
+          paginaAtual = i;
+          atualizarInterface();
+        };
+        paginacaoDiv.appendChild(btn);
+      }
     }
 
-    const estadoRef = ref(db, 'rifas');
-    onValue(estadoRef, (snapshot) => {
+    onValue(ref(db, 'rifas'), (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        estadoNumeros = Array.from({ length: totalPaginas * numerosPorPagina }, () => false);
+        estadoNumeros = Array.from({ length: 1000 }, () => false);
         Object.entries(data).forEach(([index, valor]) => {
           estadoNumeros[parseInt(index)] = valor;
         });
-        atualizarInterface();
       }
+      atualizarInterface();
     });
 
-    window.mostrarPagina = mostrarPagina;
-
-    window.gerarImagem = () => {
-      const alvo = document.body;
-      html2canvas(alvo, {
-        useCORS: true,
-        scrollX: 0,
-        scrollY: 0,
-        width: document.body.scrollWidth,
-        height: document.body.scrollHeight,
-        windowWidth: document.body.scrollWidth,
-        windowHeight: document.body.scrollHeight
-      }).then(canvas => {
-        const imagem = canvas.toDataURL("image/png");
-        const link = document.createElement('a');
-        link.href = imagem;
-        link.download = `rifa_pagina_${paginaAtual}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      });
-    };
-
     window.comprarSelecionados = () => {
-      const alvo = document.createElement('div');
-      alvo.style.padding = '20px';
-      alvo.style.fontFamily = 'Arial';
-      alvo.innerHTML = `
-        <h2>Comprovante de Compra</h2>
-        <p><strong>Números comprados:</strong> ${selecionados.join(', ')}</p>
-        <p><strong>Data:</strong> ${new Date().toLocaleString()}</p>
-      `;
+      if (selecionados.length === 0) return;
 
-      document.body.appendChild(alvo);
+      const nomeComprador = document.getElementById('nomeIn').value.trim();
+      const telComprador = document.getElementById('telIn').value.trim();
 
-      html2canvas(alvo).then(canvas => {
-        const imagem = canvas.toDataURL("image/png");
+      if (!nomeComprador || !telComprador) {
+        alert("Por favor, preencha o seu Nome e seu Telefone para prosseguir.");
+        return;
+      }
+
+      const formatados = selecionados.map(n => n.toString().padStart(3, '0'));
+      const valorTotal = `R$ ${(selecionados.length * 5).toFixed(2)}`;
+      
+      const compDiv = document.getElementById('comprovante-template');
+      document.getElementById('comp-data').textContent = new Date().toLocaleString('pt-BR');
+      document.getElementById('comp-nome').textContent = nomeComprador;
+      document.getElementById('comp-tel').textContent = telComprador;
+      document.getElementById('comp-lista-numeros').textContent = formatados.join(', ');
+      document.getElementById('comp-total').textContent = valorTotal;
+      
+      compDiv.style.display = 'block';
+
+      html2canvas(compDiv, { scale: 2 }).then(canvas => {
         const link = document.createElement('a');
-        link.href = imagem;
-        link.download = `comprovante_rifa.png`;
-        document.body.appendChild(link);
+        link.href = canvas.toDataURL("image/png");
+        link.download = `comprovante_${nomeComprador.replace(/\s+/g, '_')}.png`;
         link.click();
-        document.body.removeChild(link);
-        document.body.removeChild(alvo);
+        
+        compDiv.style.display = 'none';
 
-        // Marcar no banco de dados
         selecionados.forEach(num => {
-          const indexGlobal = num - 1;
-          set(ref(db, 'rifas/' + indexGlobal), true);
+          set(ref(db, 'rifas/' + (num - 1)), true);
         });
 
+        alert("Seu comprovante foi gerado com sucesso! Envie o print no WhatsApp para validação.");
+        
+        // Limpar inputs e estados
+        document.getElementById('nomeIn').value = '';
+        document.getElementById('telIn').value = '';
         selecionados = [];
-        botaoComprar.style.display = 'none';
+        atualizarPainelAcoes();
+        atualizarInterface();
       });
     };
-
-    mostrarPagina(1);
   </script>
 </head>
 
 <body>
   <div class="topo" id="topo">
-    <h2>🎟️ Rifa Solidária - R$ 5,00 - Sorteio na Loteria Federal</h2>
-    <h2>💸 PIX: 04731629039 </h2>
-    <h3>Esta rifa foi criada com o objetivo de ajudar a minha esposa no tratamento de sua doença ❤️</h3>
+    <h2>🎟️ Rifa Solidária</h2>
+    <h3>Tratamento para cirurgia nos olhos decorrente da diabetes</h3>
 
     <div class="secao-premios">
       <div class="premio-card">
         <p><strong>1º Prêmio</strong></p>
-        <span>Fogão CookTop</span>
-        <img src="img/fogao.jpg" alt="Fogão" class="img-rifa">
+        <span>2 Rodízios na Pizzaria Maffi</span>
       </div>
-
       <div class="premio-card">
         <p><strong>2º Prêmio</strong></p>
-        <span>Batedeira</span>
-        <img src="img/batedeira.jpg" alt="Batedeira" class="img-rifa">
+        <span>1 Kit de Barbear</span>
       </div>
-
       <div class="premio-card">
         <p><strong>3º Prêmio</strong></p>
-        <span>Liquidificador</span>
-        <img src="img/liquidificador.jpg" alt="Liquidificador" class="img-rifa">
+        <span>1 Kit de Perfume</span>
       </div>
     </div>
 
-    <p style="margin-top: 20px;"><strong>Sorteio:</strong> 16/05/2026</p>
+    <div id="pixInstrucao" class="pix-container">
+      Selecione os números desejados abaixo para gerar o pagamento.
+    </div>
+    
+    <p><strong>Sorteio pela Loteria Federal:</strong> 16/05/2026</p>
   </div>
 
-  <div class="botoes-pagina">
-    <button onclick="mostrarPagina(1)">Página 1</button>
-    <button onclick="mostrarPagina(2)">Página 2</button>
-    <button onclick="mostrarPagina(3)">Página 3</button>
-    <button onclick="mostrarPagina(4)">Página 4</button>
-    <button onclick="mostrarPagina(5)">Página 5</button>
+  <div id="painelCadastro" class="cadastro-container">
+    <h3>📝 Dados do Comprador</h3>
+    <div class="campo-grupo">
+      <label for="nomeIn">Nome Completo:</label>
+      <input type="text" id="nomeIn" placeholder="Digite seu nome">
+    </div>
+    <div class="campo-grupo">
+      <label for="telIn">Telefone / WhatsApp:</label>
+      <input type="tel" id="telIn" placeholder="(00) 00000-0000">
+    </div>
+    <button id="botaoComprar" onclick="comprarSelecionados()">🛒 Confirmar & Gerar Único Comprovante</button>
   </div>
 
+  <div class="botoes-pagina" id="paginacao"></div>
   <div class="tabela-rifas" id="rifaContainer"></div>
 
-  <button id="botaoComprar" onclick="comprarSelecionados()">🛒 Comprar Números Selecionados</button>
-  <button onclick="gerarImagem()">🖼️ Gerar Imagem da Página Atual</button>
+  <div id="comprovante-template">
+    <div class="comp-header">
+      <div class="comp-title">BILHETE DE COMPRA</div>
+      <div class="comp-subtitle">Rifa Solidária</div>
+    </div>
+    <div class="comp-body">
+      <p><strong>📅 Data/Hora:</strong> <span id="comp-data"></span></p>
+      <p><strong>👤 Comprador:</strong> <span id="comp-nome"></span></p>
+      <p><strong>📞 Telefone:</strong> <span id="comp-tel"></span></p>
+      
+      <div class="comp-subsecao">
+        <p><strong>🎁 Prêmios Concorridos:</strong><br>
+        • 1º: 2 Rodízios na Pizzaria Maffi<br>
+        • 2º: 1 Kit de Barbear<br>
+        • 3º: 1 Kit de Perfume</p>
+      </div>
+
+      <div class="comp-subsecao">
+        <p><strong>💵 Valor Total Pago:</strong> <span id="comp-total"></span></p>
+        <p><strong>🍀 Seus Números:</strong></p>
+        <div class="comp-numeros" id="comp-lista-numeros"></div>
+      </div>
+    </div>
+    <div class="comp-footer">
+      <p>Obrigado por ajudar no tratamento!<br><strong>Sorteio Federal em 16/05/2026. Envie este print para validação.</strong></p>
+    </div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
-
 </html>
