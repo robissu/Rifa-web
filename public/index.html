@@ -85,9 +85,8 @@
     let estadoNumeros = Array.from({ length: 1000 }, () => false);
     let selecionados = [];
 
-    // CONFIGURAÇÃO DAS DUAS CHAVES PIX
-    const CHAVE_PIX_1 = "380.783.090-15"; // Números 001 a 500
-    const CHAVE_PIX_2 = "018.541.620-98"; // Números 501 a 1000
+    // CONFIGURAÇÃO DA CHAVE PIX ÚNICA
+    const CHAVE_PIX_UNICA = "38078309015";
 
     function atualizarInterface() {
       container.innerHTML = '';
@@ -125,17 +124,7 @@
     function atualizarPainelAcoes() {
       if (selecionados.length > 0) {
         painelCadastro.style.display = 'block';
-        
-        const temNaPrimeiraMetade = selecionados.some(n => n <= 500);
-        const temNaSegundaMetade = selecionados.some(n => n > 500);
-
-        if (temNaPrimeiraMetade && temNaSegundaMetade) {
-          pixInstrucao.innerHTML = `Você escolheu números de lotes diferentes.<br>Pague os números até 500 na chave:<br><span class="pix-chave">${CHAVE_PIX_1}</span><br>E os números acima de 500 na chave:<br><span class="pix-chave">${CHAVE_PIX_2}</span>`;
-        } else if (temNaSegundaMetade) {
-          pixInstrucao.innerHTML = `Efetue o PIX para a chave:<br><span class="pix-chave">${CHAVE_PIX_2}</span>`;
-        } else {
-          pixInstrucao.innerHTML = `Efetue o PIX para a chave:<br><span class="pix-chave">${CHAVE_PIX_1}</span>`;
-        }
+        pixInstrucao.innerHTML = `Efetue o PIX para a chave:<br><span class="pix-chave">${CHAVE_PIX_UNICA}</span>`;
       } else {
         painelCadastro.style.display = 'none';
         pixInstrucao.innerHTML = "Selecione os números desejados abaixo para gerar o pagamento.";
